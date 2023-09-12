@@ -15,9 +15,3 @@ val options = mapOf(
     "B" to listOf("O", "X"),
     "A optional" to listOf("1", "2", "3")
 )
-
-val defaultOptions = mapOf(
-    "A" to "TRUE",
-    "B" to "O",
-    "A optional" to "1"
-)

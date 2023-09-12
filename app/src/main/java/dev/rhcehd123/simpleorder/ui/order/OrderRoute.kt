@@ -20,9 +20,7 @@ fun OrderRoute(
         onClickOrder = { viewModel.onClickOrder() },
         onSelectOption = { title, option -> viewModel.onSelectOption(title, option) },
         cancelSelectedItem = { viewModel.onCancelSelectedItem() },
-        onBack = { viewModel.onBack() },
         onComplete = { viewModel.onCompleteOrder() },
-        itemList = dummyData,
     )
 }
 
@@ -34,16 +32,15 @@ fun OrderRoute(
     onClickOrder: () -> Unit,
     onSelectOption: (String, String) -> Unit,
     cancelSelectedItem: () -> Unit,
-    onBack: () -> Unit,
     onComplete: () -> Unit,
-    itemList: List<OrderItem>,
 ) {
     when(getOrderScreenType(uiState)) {
         OrderScreenType.OrderList -> {
+            check(uiState is OrderUiState.NoSelectedItem)
             OrderListScreen(
                 onClickMenuItem = onClickMenuItem,
                 onBack = navigateToIntro,
-                itemList = itemList,
+                itemList = uiState.orderItemList,
             )
         }
         OrderScreenType.OrderDetail -> {
@@ -51,6 +48,7 @@ fun OrderRoute(
             OrderDetailScreen (
                 selectedItem = uiState.selectedItem,
                 selectedOptions = uiState.selectedOptions,
+                availableOptions = uiState.availableOptions,
                 onBack = cancelSelectedItem,
                 onOrder = onClickOrder,
                 onSelectOption = onSelectOption

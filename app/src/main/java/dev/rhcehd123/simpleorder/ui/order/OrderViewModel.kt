@@ -10,33 +10,51 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 sealed interface OrderUiState {
 
     data class NoSelectedItem(
-        val property: Int
+        val orderItemList: List<OrderItem>,
     ): OrderUiState
 
     data class HasSelectedItem(
         val isOrderCompleted: Boolean,
         val selectedItem: OrderItem,
         val selectedOptions: Map<String, String>,
+        val availableOptions: Map<String, List<String>>,
     ): OrderUiState
 }
 
 private data class OrderViewModelState(
+    val orderItemList: List<OrderItem>? = null,
+    val availableOptions: Map<String, List<String>>? = null,
     val selectedItem: OrderItem? = null,
-    val selectedOptions: Map<String, String> = mapOf(),
+    val selectedOptions: Map<String, String>? = null,
     val isOrderCompleted: Boolean = false
 ) {
+    fun getDefaultOptions(orderItem: OrderItem): Map<String, String> {
+        val defaultOptions = mutableMapOf<String, String>()
+        orderItem.options.forEach { title ->
+            defaultOptions[title] = availableOptions?.get(title)?.get(0) ?: ""
+        }
+        return defaultOptions.toMap()
+    }
     fun toUiState() =
         if(selectedItem == null) {
-            OrderUiState.NoSelectedItem(0)
+            OrderUiState.NoSelectedItem(
+                orderItemList = if(orderItemList.isNullOrEmpty()) {
+                    listOf()
+                } else {
+                    orderItemList
+                }
+            )
         } else {
             OrderUiState.HasSelectedItem(
                 isOrderCompleted = isOrderCompleted,
                 selectedItem = selectedItem,
-                selectedOptions = selectedOptions.toMap()
+                selectedOptions = selectedOptions?.toMap() ?: mapOf(),
+                availableOptions = availableOptions?.toMap() ?: mapOf(),
             )
         }
 }
@@ -48,6 +66,19 @@ class OrderViewModel(
     private val viewModelState = MutableStateFlow(
         OrderViewModelState()
     )
+    init {
+        viewModelScope.launch {
+            val orderItemList = orderRepository.getOrderItems().getOrNull()
+            val availableOptions = orderRepository.getAvailableOptions().getOrNull()
+            viewModelState.update {
+                it.copy(
+                    orderItemList = orderItemList,
+                    availableOptions = availableOptions,
+                )
+            }
+        }
+    }
+
     val uiState = viewModelState
         .map(OrderViewModelState::toUiState)
         .stateIn(
@@ -60,6 +91,7 @@ class OrderViewModel(
         viewModelState.update {
             it.copy(
                 selectedItem = orderItem,
+                selectedOptions = it.getDefaultOptions(orderItem),
             )
         }
     }
@@ -90,18 +122,18 @@ class OrderViewModel(
     fun onSelectOption(title: String, option: String) {
         viewModelState.update {
             it.copy(
-                selectedOptions = it.selectedOptions.plus(title to option),
+                selectedOptions = it.selectedOptions?.plus(title to option),
             )
         }
     }
 
-    fun onBack() {
-
-    }
-
     fun onCompleteOrder() {
         viewModelState.update {
-            OrderViewModelState()
+            it.copy(
+                selectedItem = null,
+                selectedOptions = null,
+                isOrderCompleted = false,
+            )
         }
     }
 

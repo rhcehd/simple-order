@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import dev.rhcehd123.simpleorder.ui.order.options
 
 @Composable
 fun SimpleOrderSelector(

@@ -13,11 +13,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.rhcehd123.simpleorder.data.model.OrderItem
+import dev.rhcehd123.simpleorder.data.repository.options
+import dev.rhcehd123.simpleorder.data.repository.orderItems
 import dev.rhcehd123.simpleorder.ui.components.SimpleOrderButton
 import dev.rhcehd123.simpleorder.ui.components.SimpleOrderScaffold
 import dev.rhcehd123.simpleorder.ui.components.SimpleOrderSelector
@@ -49,6 +52,7 @@ fun OrderListScreen(
 fun OrderDetailScreen(
     selectedItem: OrderItem,
     selectedOptions: Map<String, String>,
+    availableOptions: Map<String, List<String>>,
     onBack: () -> Unit,
     onOrder: () -> Unit,
     onSelectOption: (String, String) -> Unit,
@@ -74,10 +78,10 @@ fun OrderDetailScreen(
             }
             Spacer(modifier = Modifier.height(20.dp))
             selectedItem.options.forEach { title ->
-                val selectedOption = selectedOptions[title] ?: defaultOptions[title] ?: ""
+                val selectedOption = selectedOptions[title] ?: availableOptions[title]?.get(0) ?: ""
                 SimpleOrderSelector(
                     title = title,
-                    options = options[title] ?: listOf(),
+                    options = availableOptions[title] ?: listOf(),
                     selectedOption = selectedOption,
                     onSelectOption = onSelectOption,
                 )
@@ -131,7 +135,10 @@ fun OrderSuccessScreen(
                     )
                 }
                 Text(
-                    modifier = Modifier,
+                    modifier = Modifier
+                        .align(
+                            alignment = Alignment.CenterVertically
+                        ),
                     text = selectedItem.price.toPriceString()
                 )
             }
@@ -211,7 +218,7 @@ fun OrderListScreenPreview() {
     OrderListScreen(
         onClickMenuItem = {},
         onBack = {},
-        itemList = dummyData
+        itemList = orderItems
     )
 }
 
@@ -219,8 +226,9 @@ fun OrderListScreenPreview() {
 @Composable
 fun OrderDetailScreenPreview() {
     OrderDetailScreen(
-        selectedItem = dummyData[0],
+        selectedItem = orderItems[0],
         selectedOptions = mapOf(),
+        availableOptions = options,
         onBack = {},
         onOrder = {},
         onSelectOption = {_,_->}
@@ -231,7 +239,7 @@ fun OrderDetailScreenPreview() {
 @Composable
 fun OrderSuccessScreenPreview() {
     OrderSuccessScreen(
-        selectedItem = dummyData[0],
+        selectedItem = orderItems[0],
         selectedOptions = mapOf(
             "A" to "TRUE",
             "B" to "O",

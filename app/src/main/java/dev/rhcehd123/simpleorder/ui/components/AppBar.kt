@@ -17,7 +17,7 @@ fun SimpleOrderTopAppBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Text(text = "hello world")
+            Text(text = "")
         },
         navigationIcon = {
             IconButton(onClick = onBack) {

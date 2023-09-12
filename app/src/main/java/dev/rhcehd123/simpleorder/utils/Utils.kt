@@ -34,7 +34,7 @@ fun Map<String, String>.toOptionString(): String {
     values.forEachIndexed { index, option ->
         buf.append(option)
         if(index != values.size - 1) {
-            buf.append("/")
+            buf.append(" / ")
         }
     }
     return buf.toString()
