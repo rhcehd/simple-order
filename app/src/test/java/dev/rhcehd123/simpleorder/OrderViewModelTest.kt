@@ -12,6 +12,8 @@ import io.mockk.mockk
 
 class OrderViewModelTest: BehaviorSpec() {
     init {
+        Dispatchers.setMain(StandardTestDispatcher())
+        coroutineTestScope = true
         val orderRepository = mockk<OrderRepository>()
         coEvery { orderRepository.getOrderItems().getOrNull() } returns testOrderItems
         coEvery { orderRepository.getAvailableOptions().getOrNull() } returns testOptions
