@@ -25,4 +25,5 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Say Hello
+      if: failure()
       run: echo 'hello'
