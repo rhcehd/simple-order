@@ -28,4 +28,4 @@ jobs:
       run: ./gradlew :app:testDebugUnitTest
     - name: Say Hello
       if: failure()
-      run: echo 'hello'
+      run: ls
