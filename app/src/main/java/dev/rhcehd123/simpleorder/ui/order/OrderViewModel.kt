@@ -16,6 +16,7 @@ sealed interface OrderUiState {
 
     data class NoSelectedItem(
         val orderItemList: List<OrderItem>,
+        val categoryList: List<String>,
     ): OrderUiState
 
     data class HasSelectedItem(
@@ -28,6 +29,7 @@ sealed interface OrderUiState {
 
 private data class OrderViewModelState(
     val orderItemList: List<OrderItem>? = null,
+    val categoryList: List<String>? = null,
     val availableOptions: Map<String, List<String>>? = null,
     val selectedItem: OrderItem? = null,
     val selectedOptions: Map<String, String>? = null,
@@ -47,6 +49,11 @@ private data class OrderViewModelState(
                     listOf()
                 } else {
                     orderItemList
+                },
+                categoryList = if(categoryList.isNullOrEmpty()) {
+                    listOf()
+                } else {
+                    categoryList
                 }
             )
         } else {
@@ -60,7 +67,7 @@ private data class OrderViewModelState(
 }
 
 class OrderViewModel(
-    val orderRepository: OrderRepository,
+    private val orderRepository: OrderRepository,
 ): ViewModel() {
 
     private val viewModelState = MutableStateFlow(
@@ -69,10 +76,12 @@ class OrderViewModel(
     init {
         viewModelScope.launch {
             val orderItemList = orderRepository.getOrderItems().getOrNull()
+            val categoryList = orderRepository.getCategory().getOrNull()
             val availableOptions = orderRepository.getAvailableOptions().getOrNull()
             viewModelState.update {
                 it.copy(
                     orderItemList = orderItemList,
+                    categoryList = categoryList,
                     availableOptions = availableOptions,
                 )
             }

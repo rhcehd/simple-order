@@ -41,6 +41,7 @@ fun OrderRoute(
                 onClickMenuItem = onClickMenuItem,
                 onBack = navigateToIntro,
                 itemList = uiState.orderItemList,
+                categoryList = uiState.categoryList,
             )
         }
         OrderScreenType.OrderDetail -> {

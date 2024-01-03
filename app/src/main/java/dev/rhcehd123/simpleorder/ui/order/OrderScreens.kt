@@ -19,12 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.rhcehd123.simpleorder.data.model.OrderItem
+import dev.rhcehd123.simpleorder.data.repository.category
 import dev.rhcehd123.simpleorder.data.repository.options
 import dev.rhcehd123.simpleorder.data.repository.orderItems
 import dev.rhcehd123.simpleorder.ui.components.SimpleOrderButton
 import dev.rhcehd123.simpleorder.ui.components.SimpleOrderScaffold
 import dev.rhcehd123.simpleorder.ui.components.SimpleOrderSelector
-import dev.rhcehd123.simpleorder.utils.sortOrderItems
 import dev.rhcehd123.simpleorder.utils.TextSize
 import dev.rhcehd123.simpleorder.utils.toOptionString
 import dev.rhcehd123.simpleorder.utils.toPriceString
@@ -34,6 +34,7 @@ fun OrderListScreen(
     onClickMenuItem: (OrderItem) -> Unit,
     onBack: () -> Unit,
     itemList: List<OrderItem>,
+    categoryList: List<String>,
 ) {
     SimpleOrderScaffold(
         onBack = onBack
@@ -44,6 +45,7 @@ fun OrderListScreen(
                 .padding(top = 28.dp),
             onClickMenuItem = onClickMenuItem,
             itemList = itemList,
+            categoryList = categoryList,
         )
     }
 }
@@ -157,17 +159,18 @@ fun MenuList(
     modifier: Modifier = Modifier,
     onClickMenuItem: (OrderItem) -> Unit,
     itemList: List<OrderItem>,
+    categoryList: List<String>
 ) {
-    val categoryList = sortOrderItems(itemList)
     LazyColumn(
         modifier = modifier
             .padding(bottom = 12.dp)
     ) {
-        categoryList.forEach { orderItem ->
+        categoryList.forEach { category ->
             item {
-                CategoryTitle(orderItem.key)
+                CategoryTitle(category)
             }
-            items(orderItem.value) {
+            val categoryItem = itemList.filter { it.category == category }
+            items(categoryItem) {
                 MenuItem(
                     orderItem = it,
                     onClick = onClickMenuItem,
@@ -218,7 +221,8 @@ fun OrderListScreenPreview() {
     OrderListScreen(
         onClickMenuItem = {},
         onBack = {},
-        itemList = orderItems
+        itemList = orderItems,
+        categoryList = category
     )
 }
 

@@ -27,10 +27,10 @@ fun SimpleOrderSelector(
     onSelectOption: (String, String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(vertical = 8.dp)
+        modifier = Modifier.padding(vertical = 16.dp)
     ){
         Text(
-            modifier = Modifier,
+            modifier = Modifier.padding(start = 8.dp),
             text = title,
             fontSize = TextUnit(20f, TextUnitType.Sp),
             fontWeight = FontWeight.Medium,
@@ -64,7 +64,7 @@ fun SimpleOrderSelector(
                 ) {
                     Text(
                         text = option,
-                        fontSize = TextUnit(20f, TextUnitType.Sp),
+                        fontSize = TextUnit(15f, TextUnitType.Sp),
                     )
                 }
                 if(index != options.lastIndex) {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "661206555214",
+    "project_id": "simple-order-39b17",
+    "storage_bucket": "simple-order-39b17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661206555214:android:bf402efbdba8e44596c11f",
+        "android_client_info": {
+          "package_name": "dev.rhcehd123.simpleorder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg6tP9K2htK9L-8Sc9wdUxH6tCvxyjMz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

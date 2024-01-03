@@ -3,15 +3,28 @@ package dev.rhcehd123.simpleorder.data.repository
 import dev.rhcehd123.simpleorder.data.model.OrderItem
 
 val orderItems = listOf(
-    OrderItem("사과", "과일", 1000, listOf("A", "B", "A optional")),
-    OrderItem("배", "과일", 2000, listOf("A")),
-    OrderItem("참외", "과일", 3000, listOf("B")),
-    OrderItem("수박", "과일", 4000, listOf()),
-    OrderItem("토마토", "채소", 4000, listOf("A", "B", "A optional")),
+    OrderItem(1, "에스프레소", "COFFEE", 4000, listOf("사이즈", "온도", "얼음 양", "컵")),
+    OrderItem(2, "아메리카노", "COFFEE", 3000, listOf("사이즈", "온도", "얼음 양", "컵")),
+    OrderItem(3, "카페라테", "COFFEE", 3000, listOf("사이즈", "온도", "얼음 양", "컵")),
+    OrderItem(4, "콜드브루", "COFFEE", 4000, listOf("사이즈", "얼음 양", "컵")),
+
+    OrderItem(1, "그린티", "TEA", 3000, listOf("사이즈", "온도", "얼음 양", "컵")),
+    OrderItem(2, "밀크티", "TEA", 3000, listOf("사이즈", "온도", "얼음 양", "컵")),
+    OrderItem(3, "아이스티", "TEA", 3000, listOf("사이즈", "얼음 양", "컵")),
+
+    OrderItem(1, "허니 브레드", "Dessert", 6000, listOf()),
+    OrderItem(2, "티라미수", "Dessert", 6000, listOf()),
+)
+
+val category = listOf(
+    "COFFEE",
+    "TEA",
+    "Dessert",
 )
 
 val options = mapOf(
-    "A" to listOf("TRUE", "FALSE"),
-    "B" to listOf("O", "X"),
-    "A optional" to listOf("1", "2", "3")
+    "사이즈" to listOf("Tall", "Grande", "Venti"),
+    "온도" to listOf("HOT", "ICED"),
+    "얼음 양" to listOf("얼음 많이", "얼음 적게"),
+    "컵" to listOf("매장 컵", "테이크아웃"),
 )
